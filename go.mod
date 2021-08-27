@@ -1,4 +1,4 @@
-module github.com/cdle/xdd
+module github.com/58563528/DDD
 
 go 1.16
 
