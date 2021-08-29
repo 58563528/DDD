@@ -104,6 +104,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"sign", "打卡", "签到"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			//if sender.Type == "tgg" {
 			//	sender.Type = "tg"
@@ -158,6 +159,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"coin", "许愿币", "余额", "yu", "yue"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			return fmt.Sprintf("余额%d", GetCoin(sender.UserID))
 		},
@@ -174,7 +176,7 @@ var codeSignals = []CodeSignal{
 				return nil
 			}
 			return rsp
-			//return "小滴滴和京东没有任何关系，请使用ninja。"
+			//return "扫码暂时失效，需手动抓取Cookie，将cookie发送给此机器人。"
 		},
 	},
 	{
@@ -238,7 +240,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"查询", "query"},
-		// Admin:   true,
+		//Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			sender.handleJdCookies(func(ck *JdCookie) {
 				sender.Reply(ck.Query())
@@ -266,6 +268,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"翻翻乐"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			cost := Int(sender.JoinContens())
 			if cost <= 0 || cost > 10000 {
@@ -301,6 +304,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"许愿", "愿望", "wish", "hope", "want"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			// return "听不到，看不见。"
 			ct := sender.JoinContens()
@@ -459,7 +463,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"get-env", "env", "e"},
-		// Admin:   true,
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			ct := sender.JoinContens()
 			if ct == "" {
@@ -506,18 +510,20 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"降级"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
-			return "滚"
+			return "..."
 		},
 	},
 	{
 		Command: []string{"。。。"},
 		Handle: func(sender *Sender) interface{} {
-			return "你很无语吗？"
+			return "..."
 		},
 	},
 	{
 		Command: []string{"祈祷", "祈愿", "祈福"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			if _, ok := mx[sender.UserID]; ok {
 				return "你祈祷过啦，等下次我忘记了再来吧。"
@@ -533,6 +539,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"撤销愿望"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			ReturnCoin(sender)
 			return nil
@@ -596,6 +603,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"转账"},
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			cost := 1
 			if sender.ReplySenderUserID == 0 {

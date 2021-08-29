@@ -126,6 +126,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 								nck.InPool(ck.PtKey)
 								msg := fmt.Sprintf("更新账号，%s", ck.PtPin)
 								(&JdCookie{}).Push(msg)
+								sender.Reply(fmt.Sprintf("更新账号成功"))
 								logs.Info(msg)
 							} else {
 								if Cdle {
