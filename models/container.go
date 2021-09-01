@@ -392,6 +392,7 @@ func (c *Container) request(ss ...string) ([]byte, error) {
 	for _, s := range ss {
 		if s == GET || s == POST || s == PUT || s == DELETE {
 			method = s
+		}
 			}
 	switch c.Version {
 	case "2.2":
