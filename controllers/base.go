@@ -108,7 +108,7 @@ func (c *BaseController) ResponseError(ps ...interface{}) *BaseController {
 
 //Logined 登录
 func (c *BaseController) Logined() *BaseController {
-	if models.Cdle { //作者调试
+	if models.Debug { //作者调试
 		c.Master = true
 		return c
 	}
