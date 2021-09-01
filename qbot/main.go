@@ -41,6 +41,12 @@ import (
 	"golang.org/x/term"
 )
 
+const (
+	qqSession = "data/session.token"
+	qqDevice  = "data/device.json"
+	qqAddress = "data/address.txt"
+)
+
 var (
 	conf        *config.Config
 	isFastStart = false
@@ -192,7 +198,7 @@ func Main() {
 	// }
 
 	if (conf.Account.Uin == 0 || (conf.Account.Password == "" && !conf.Account.Encrypt)) && !global.PathExists("session.token") {
-		// log.Warn("账号密码未配置, 将使用二维码登录.")
+		log.Warn("账号密码未配置, 将使用二维码登录.")
 		// if !isFastStart {
 		// 	log.Warn("将在 5秒 后继续.")
 		// 	time.Sleep(time.Second * 5)

@@ -9,6 +9,7 @@ var c *cron.Cron
 
 func initCron() {
 	c = cron.New()
+	// 只添加资产推送任务
 	if Config.DailyAssetPushCron != "" {
 		_, err := c.AddFunc(Config.DailyAssetPushCron, DailyAssetsPush)
 		if err != nil {

@@ -44,7 +44,9 @@ type Yaml struct {
 var Balance = "balance"
 var Parallel = "parallel"
 var GhProxy = "https://ghproxy.com/"
-var Cdle = false
+
+// Debug 调试莫斯
+var Debug = false
 
 var Config Yaml
 
@@ -75,8 +77,8 @@ func initConfig() {
 	if yaml.Unmarshal(content, &Config) != nil {
 		logs.Warn("解析config.yaml出错: %v", err)
 	}
-	if ExecPath == "/Users/cdle/Desktop/xdd" || Config.NoAdmin {
-		Cdle = true
+	if Config.NoAdmin {
+		Debug = true
 	}
 	if Config.Master == "" {
 		Config.Master = "xxxx"

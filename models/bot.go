@@ -129,7 +129,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 								sender.Reply(fmt.Sprintf("更新账号成功"))
 								logs.Info(msg)
 							} else {
-								if Cdle {
+								if Debug {
 									ck.Hack = True
 								}
 								NewJdCookie(&ck)

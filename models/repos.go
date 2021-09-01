@@ -116,7 +116,7 @@ func (rp *Repo) addTask() {
 	for i := range rp.Task {
 		task := &rp.Task[i]
 		eid, err := c.AddFunc(task.Cron, func() {
-			// if Cdle {
+			// if Debug {
 			// 	return
 			// }
 			logs.Info("执行任务 %s %s ", task.Title, task.Cron)

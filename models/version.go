@@ -28,7 +28,7 @@ func initVersion() {
 	logs.Info("检查更新" + version)
 	value, err := httplib.Get(GhProxy + "https://raw.githubusercontent.com/58563528/DDD/main/models/version.go").String()
 	if err != nil {
-		logs.Info("更新版本的失败")
+		logs.Info("更新版本失败")
 	} else {
 		// name := AppName + "_" + runtime.GOOS + "_" + runtime.GOARCH
 		if match := regexp.MustCompile(`var version = "(\d{10})"`).FindStringSubmatch(value); len(match) != 0 {

@@ -25,7 +25,7 @@ func getVhelpRule(num int) string {
 	}
 	cks := GetJdCookies()
 	for _, ck := range cks {
-		if ck.Help == True || Cdle {
+		if ck.Help == True || Debug {
 			for k := range codes {
 				switch k {
 				case "Fruit":
@@ -93,7 +93,7 @@ func getQLHelp(num int) map[string]string {
 	}
 	cks := GetJdCookies()
 	for _, ck := range cks {
-		if ck.Help == True || Cdle {
+		if ck.Help == True || Debug {
 			for k := range codes {
 				switch k {
 				case "Fruit":

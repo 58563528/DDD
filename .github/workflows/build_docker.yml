@@ -1,0 +1,25 @@
+name: 编译打包Docker镜像
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+  watch:
+    types: started
+jobs:
+  build_docker:
+    name: 打包Docker镜像
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Build Docker Image
+        run: |
+          bash build_docker.sh
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
