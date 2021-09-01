@@ -75,6 +75,8 @@ func main() {
 	}()
 	if models.Config.QQID != 0 || models.Config.QQGroupID != 0 {
 		go qbot.Main()
+	} else {
+		logs.Info("没有检测到QQ机器人配置，跳过QQ机器人启动")
 	}
 	web.Run()
 }
