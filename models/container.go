@@ -387,7 +387,12 @@ func (c *Container) getToken() error {
 /**
 请求青龙接口
 */
-func (c *Container) request(api string, method string, body string) ([]byte, error) {
+func (c *Container) request(ss ...string) ([]byte, error) {
+	var api, method, body string
+	for _, s := range ss {
+		if s == GET || s == POST || s == PUT || s == DELETE {
+			method = s
+			}
 	switch c.Version {
 	case "2.2":
 	case "2.8":
