@@ -392,15 +392,22 @@ func (c *Container) request(ss ...string) ([]byte, error) {
 	for _, s := range ss {
 		if s == GET || s == POST || s == PUT || s == DELETE {
 			method = s
+		} else if strings.Contains(s, "/api/") {
+			api = s
+		}else if strings.Contains(s, "/open") {
+			api = s
+		 }else {
+			body = s
 		}
-			}
+	}
+	/*
 	switch c.Version {
 	case "2.2":
 	case "2.8":
 		api = "/api" + api
 	case "2.9":
 		api = "/open" + api
-	}
+	}*/
 	var req *httplib.BeegoHTTPRequest
 	var i = 0
 	for {

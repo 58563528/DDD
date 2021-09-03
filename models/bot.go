@@ -101,7 +101,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 				return nil
 			}
 		}
-		{ //
+		{ //ptkey
 			ss := regexp.MustCompile(`pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
 
 			if len(ss) > 0 {
@@ -146,6 +146,62 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 					Save <- &JdCookie{}
 				}()
 				return nil
+			}
+		}
+		{ //wskey
+			if strings.Contains(msg, "wskey=") {
+				//ws := regexp.MustCompile(`pin=([^;=\s]+);wskey=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
+				wstopt := cmd(fmt.Sprintf(`wskey="%s" python3 wspt.py`, msg), sender)
+				wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
+				sender.Reply(fmt.Sprintf(wspt))
+				ss := regexp.MustCompile(`wskey=([^;=\s]+);pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(wstopt, -1)
+				if len(ss) > 0 {
+					xyb := 0
+					for _, s := range ss {
+						ck := JdCookie{
+							WsKey: s[1],
+							PtKey: s[2],
+							PtPin: s[3],
+						}
+						//sender.Reply(fmt.Sprintf(`ws-"%s" pt-"%s" pin-"%s"`, ck.WsKey, ck.PtKey, ck.PtPin))
+						msg := fmt.Sprintf("ws-%s", ck.WsKey)
+						logs.Info(msg)
+						if CookieOK(&ck) {
+							xyb++
+							if sender.IsQQ() {
+								ck.QQ = sender.UserID
+							} else if sender.IsTG() {
+								//ck.Telegram = sender.UserID
+							}
+							if HasKey(ck.PtKey) {
+								sender.Reply(fmt.Sprintf("重复提交"))
+							} else {
+								if nck, err := GetJdCookie(ck.PtPin); err == nil {
+									nck.InPoolws(ck.WsKey, ck.PtKey)
+									msg := fmt.Sprintf("更新账号，%s", ck.PtPin)
+									(&JdCookie{}).Push(msg)
+									logs.Info(msg)
+								} else {
+									if Cdle {
+										ck.Hack = True
+									}
+									NewJdCookie(&ck)
+									msg1 := fmt.Sprintf("添加wskey，%s", ck.WsKey)
+									msg := fmt.Sprintf("添加账号，%s", ck.PtPin)
+									sender.Reply(fmt.Sprintf("很棒，许愿币+1，余额%d", AddCoin(sender.UserID)))
+									logs.Info(msg)
+									logs.Info(msg1)
+								}
+							}
+						} else {
+							sender.Reply(fmt.Sprintf("无效，许愿币-1，余额%d", RemCoin(sender.UserID, 1)))
+						}
+					}
+					go func() {
+						Save <- &JdCookie{}
+					}()
+					return nil
+				}
 			}
 		}
 		{

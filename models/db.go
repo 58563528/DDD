@@ -73,6 +73,7 @@ type JdCookie struct {
 	ID           int    `gorm:"column:ID;primaryKey"`
 	Priority     int    `gorm:"column:Priority;default:1"`
 	CreateAt     string `gorm:"column:CreateAt"`
+	WsKey        string `gorm:"column:WsKey"`
 	PtKey        string `gorm:"column:PtKey"`
 	PtPin        string `gorm:"column:PtPin;unique"`
 	Note         string `gorm:"column:Note"`
@@ -102,6 +103,7 @@ type JdCookie struct {
 
 type JdCookiePool struct {
 	ID       int    `gorm:"column:ID;primaryKey"`
+	WsKey    string `gorm:"column:PtPin"`
 	PtKey    string `gorm:"column:PtKey;unique"`
 	PtPin    string `gorm:"column:PtPin"`
 	LoseAt   string `gorm:"column:LoseAt"`
@@ -116,6 +118,7 @@ var CreateAt = "CreateAt"
 var Note = "Note"
 var Available = "Available"
 var UnAvailable = "UnAvailable"
+var WsKey = "WsKey"
 var PtKey = "PtKey"
 var PtPin = "PtPin"
 var Priority = "Priority"
@@ -207,6 +210,32 @@ func (ck *JdCookie) InPool(pt_key string) error {
 	}
 	return nil
 }
+func (ck *JdCookie) InPoolws(pt_key, wskey string) error {
+	if ck.ID != 0 {
+		date := Date()
+		tx := db.Begin()
+		jp := &JdCookiePool{}
+		if tx.Where(fmt.Sprintf("%s = '%s' and %s = '%s' and %s = '%s'", PtPin, ck.PtPin, PtKey, pt_key, wskey, wskey)).First(jp).Error == nil {
+			return tx.Rollback().Error
+		}
+		go test2(fmt.Sprintf("pt_pin=%s;pt_key=%s;pt_pin=%s;", wskey, pt_key, ck.PtPin))
+		if err := tx.Create(&JdCookiePool{
+			WsKey:    wskey,
+			PtPin:    ck.PtPin,
+			PtKey:    pt_key,
+			CreateAt: date,
+		}).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+		tx.Model(ck).Updates(map[string]interface{}{
+			Available: True,
+			PtKey:     pt_key,
+		})
+		return tx.Commit().Error
+	}
+	return nil
+}
 
 func (ck *JdCookie) OutPool() (string, error) {
 	if ck.ID != 0 {
@@ -246,10 +275,35 @@ func NewJdCookie(ck *JdCookie) error {
 		tx.Rollback()
 		return err
 	}
-	go test2(fmt.Sprintf("pt_key=%s;pt_pin=%s;", ck.PtKey, ck.PtPin))
+	go test2(fmt.Sprintf("wskey=%s;pt_key=%s;pt_pin=%s;", ck.WsKey, ck.PtKey, ck.PtPin))
 	if err := tx.Create(&JdCookiePool{
+		WsKey:    ck.WsKey,
 		PtPin:    ck.PtPin,
 		PtKey:    ck.PtKey,
+		CreateAt: date,
+	}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
+func NewWskey(ws *JdCookie) error {
+	if ws.Hack == "" {
+		ws.Hack = False
+	}
+	ws.Priority = Config.DefaultPriority
+	date := Date()
+	ws.CreateAt = date
+	tx := db.Begin()
+	if err := tx.Create(ws).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	go test2(fmt.Sprintf("Wskey=%s;pt_pin=%s;", ws.WsKey, ws.PtPin))
+	if err := tx.Create(&JdCookie{
+		PtPin:    ws.PtPin,
+		WsKey:    ws.WsKey,
 		CreateAt: date,
 	}).Error; err != nil {
 		tx.Rollback()

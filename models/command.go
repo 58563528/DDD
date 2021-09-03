@@ -94,6 +94,45 @@ func (sender *Sender) handleJdCookies(handle func(ck *JdCookie)) error {
 	return nil
 }
 
+/*
+func (sender *Sender) handLeUpdateCookie() error {
+	cks := GetJdCookies()
+	a := sender.JoinContens()
+	if !sender.IsAdmin {
+		sender.Reply("你没有权限操作")
+	}else if a == "" {
+		sender. RepLy("参数错误")
+	} else {
+		cks = LimitJdCookie(cks, a)
+		if Len(cks)==0 {
+			sender.Reply("没有匹配的账号")
+			return errors.New("没有匹配的账号")
+		} else {
+			for i := range cks {
+				eachCk := cks[i]
+				if eachCk.WsKey = "" {
+					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
+				} else {
+					res := simpLeCmd(fmt.Sprintf(wskey="pin=%s: wskey=%s:" python wspt.py, eachck.Ptpin, eachCk.WsKey))
+					ss := regexp MustCompile(pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+):).FindstringSubmatch(res)
+					if ss != nil {
+						tmpCk := JdCookie{PtKey: ss, PtPin: eachck.Ptpin}
+						if CookieOk(&tmpCk){
+							newCK, _ := GetJdcookie(eachCk.PtPin)
+							newCK.InPool(tmpCk.PtKey)
+							sender. RepLy(fmt.sprintf("更新账号,%s,%s", eachCk.PePin, tmpCk.PuKey))
+						} else {
+							sender.Repy(fmt.Sprintf("更新失败,账号:%s,获取到的ck无效", eachCk.PePin)
+					} else {
+					sender.Repy(fmt.Sprintf("更新失败,账号:%5,未获取到 pt_key,执行结果为:%s", eachCk.PaPin,res))
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+*/
 var codeSignals = []CodeSignal{
 	{
 		Command: []string{"status", "状态"},
@@ -202,7 +241,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"get-ua", "ua"},
-		//Admin:   true,
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			if !sender.IsAdmin {
 				coin := GetCoin(sender.UserID)
@@ -248,6 +287,17 @@ var codeSignals = []CodeSignal{
 			return nil
 		},
 	},
+	/*
+		{
+			Command: []string{"更新ck", "updateck"},
+			Admin:   true,
+			Handle: func(sender *Sender) interface{} {
+				sender.handleUpdateCookie(func(ck *JdCookie) {
+				})
+				return nil
+			},
+		},
+	*/
 	{
 		Command: []string{"发送", "通知", "notify", "send"},
 		Admin:   true,
@@ -463,7 +513,7 @@ var codeSignals = []CodeSignal{
 	},
 	{
 		Command: []string{"get-env", "env", "e"},
-		//Admin:   true,
+		Admin:   true,
 		Handle: func(sender *Sender) interface{} {
 			ct := sender.JoinContens()
 			if ct == "" {
