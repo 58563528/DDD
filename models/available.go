@@ -184,7 +184,7 @@ func CookieOK(ck *JdCookie) bool {
 							(&JdCookie{}).Push(msg)
 							logs.Info(msg)
 						} else {
-							if Cdle {
+							if Debug {
 								ck.Hack = True
 							}
 						}

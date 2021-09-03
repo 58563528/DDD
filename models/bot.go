@@ -182,7 +182,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 									(&JdCookie{}).Push(msg)
 									logs.Info(msg)
 								} else {
-									if Cdle {
+									if Debug {
 										ck.Hack = True
 									}
 									NewJdCookie(&ck)
