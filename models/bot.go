@@ -160,8 +160,8 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 				//ws := regexp.MustCompile(`pin=([^;=\s]+);wskey=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
 				wstopt := cmd(fmt.Sprintf(`python3 wspt.py "%s"`, msg), sender)
 				logs.Info(wstopt)
-				wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
-				sender.Reply(fmt.Sprintf(wspt))
+				//wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
+				//sender.Reply(fmt.Sprintf(wspt))
 				ss := regexp.MustCompile(`wskey=([^;=\s]+);pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(wstopt, -1)
 				if len(ss) > 0 {
 					xyb := 0
@@ -185,14 +185,23 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 								sender.Reply(fmt.Sprintf("重复提交"))
 							} else {
 								if nck, err := GetJdCookie(ck.PtPin); err == nil {
-									nck.InPoolws(ck.WsKey, ck.PtKey)
-									msg := fmt.Sprintf("更新账号，%s", ck.PtPin)
-									(&JdCookie{}).Push(msg)
-									logs.Info(msg)
-								} else {
-									if Debug {
-										ck.Hack = True
-									}
+									ck.InPoolws(ck.WsKey, ck.PtKey)
+									if nck.WsKey == "" || len(nck.WsKey) == 0 {
+										ck.Updates(JdCookie{
+										WsKey: ck.WsKey,
+										})
+										msg := fmt.Sprintf("写入WsKey，并更新账号%s", ck.PtPin)
+										(&JdCookie{}).Push(msg)
+										logs.Info(msg)
+									} else {
+										if Debug {
+											ck.Hack = True
+										}
+										msg := fmt.Sprintf("重复写入")
+										(&JdCookie{}).Push(msg)
+										logs.Info(msg)
+										}
+								} else {		
 									NewJdCookie(&ck)
 									msg1 := fmt.Sprintf("添加wskey，%s", ck.WsKey)
 									msg := fmt.Sprintf("添加账号，%s", ck.PtPin)
