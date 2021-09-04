@@ -93,7 +93,7 @@ func (sender *Sender) handleJdCookies(handle func(ck *JdCookie)) error {
 	return nil
 }
 
-
+/*
 func (sender *Sender) handLeUpdateCookie() error {
 	cks := GetJdCookies()
 	a := sender.JoinContens()
@@ -132,7 +132,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 	}
 	return nil
 }
-
+*/
 var codeSignals = []CodeSignal{
 	{
 		Command: []string{"status", "状态"},
@@ -288,15 +288,15 @@ var codeSignals = []CodeSignal{
 		},
 	},
 	
-		{
-			Command: []string{"更新ck", "updateck"},
-			Admin:   true,
-			Handle: func(sender *Sender) interface{} {
-				sender.handleUpdateCookie(func(ck *JdCookie) {
-				})
-				return nil
-			},
+	{
+		Command: []string{"更新ck", "updateck"},
+		Admin:   true,
+		Handle: func(sender *Sender) interface{} {
+			sender.handleUpdateCookie(func(ck *JdCookie) {
+			})
+			return nil
 		},
+	},
 	
 	{
 		Command: []string{"发送", "通知", "notify", "send"},
