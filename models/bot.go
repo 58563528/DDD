@@ -171,9 +171,9 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 							PtKey: s[2],
 							PtPin: s[3],
 						}
-						//sender.Reply(fmt.Sprintf(`ws-"%s" pt-"%s" pin-"%s"`, ck.WsKey, ck.PtKey, ck.PtPin))
-						msg := fmt.Sprintf("ws-%s", ck.WsKey)
-						logs.Info(msg)
+						sender.Reply(fmt.Sprintf(`ws-"%s" pt-"%s" pin-"%s"`, ck.WsKey, ck.PtKey, ck.PtPin))
+						//msg := fmt.Sprintf("ws-%s", ck.WsKey)
+						//logs.Info(msg)
 						if CookieOK(&ck) {
 							xyb++
 							if sender.IsQQ() {
