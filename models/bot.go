@@ -184,9 +184,9 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 							if HasKey(ck.PtKey) {
 								sender.Reply(fmt.Sprintf("重复提交"))
 							} else {
-								if nck, err := GetJdCookie(ck.PtPin); err == nil {
+								if ck, err := GetJdCookie(ck.PtPin); err == nil {
 									ck.InPoolws(ck.WsKey, ck.PtKey)
-									if nck.WsKey == "" || len(nck.WsKey) == 0 {
+									if ck.WsKey == "" || len(ck.WsKey) == 0 {
 										ck.Updates(JdCookie{
 										WsKey: ck.WsKey,
 										})
