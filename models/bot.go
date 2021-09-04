@@ -162,14 +162,19 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 				logs.Info(wstopt)
 				//wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
 				//sender.Reply(fmt.Sprintf(wspt))
-				ss := regexp.MustCompile(`wskey=([^;=\s]+);pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(wstopt, -1)
-				if len(ss) > 0 {
+				ss1 := regexp.MustCompile(`pin=([^;=\s]+);wskey=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
+				if len(ss1) > 0 {
 					xyb := 0
-					for _, s := range ss {
+					for _, s := range ss1 {
 						ck := JdCookie{
-							WsKey: s[1],
-							PtKey: s[2],
-							PtPin: s[3],
+							PtPin: s[1],
+							PtKey: rsp,
+							WsKey: s[2],
+						}
+						ss := regexp.MustCompile(`pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(rsp, -1)
+						for _, s1 := range ss {
+							ck.PtPin = s1[2]
+							ck.PtKey = s1[1]
 						}
 						sender.Reply(fmt.Sprintf(`ws-"%s" pt-"%s" pin-"%s"`, ck.WsKey, ck.PtKey, ck.PtPin))
 						//msg := fmt.Sprintf("ws-%s", ck.WsKey)
