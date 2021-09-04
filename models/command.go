@@ -113,7 +113,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 				if eachCk.WsKey == "" {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
-					res := cmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachCk.PtPin, eachCk.WsKey))
+					res := cmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachCk.PtPin, eachCk.WsKey), sender)
 					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindAllStringSubmatch(res)
 					if ss != nil {
 						tmpCk := JdCookie{PtKey: ss, PtPin: eachCk.PtPin}
