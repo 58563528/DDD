@@ -9,7 +9,6 @@ import (
 	"github.com/beego/beego/v2/client/httplib"
 	"github.com/beego/beego/v2/server/web"
 	"gorm.io/gorm"
-	"github.com/58563528/DDD/models"
 )
 
 type CodeSignal struct {
@@ -118,7 +117,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 					if ss != nil {
 						tmpCk := JdCookie{PtKey: ss[0], PtPin: eachCk.PtPin}
 						if CookieOK(&tmpCk){
-							newCK, _ := models.GetJdCookies(eachCk.PtPin)
+							newCK, _ := GetJdCookies(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
 							sender.Reply(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
 						} else {
