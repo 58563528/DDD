@@ -287,7 +287,7 @@ var codeSignals = []CodeSignal{
 			return nil
 		},
 	},
-	/*
+	
 		{
 			Command: []string{"更新ck", "updateck"},
 			Admin:   true,
@@ -297,7 +297,7 @@ var codeSignals = []CodeSignal{
 				return nil
 			},
 		},
-	*/
+	
 	{
 		Command: []string{"发送", "通知", "notify", "send"},
 		Admin:   true,
