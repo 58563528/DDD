@@ -84,6 +84,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 	}
 	switch msg {
 	default:
+
 		{ //tyt
 			ss := regexp.MustCompile(`packetId=(\S+)(&|&amp;)currentActId`).FindStringSubmatch(msg)
 			if len(ss) > 0 {
@@ -157,7 +158,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 		{ //wskey
 			if strings.Contains(msg, "wskey=") {
 				//ws := regexp.MustCompile(`pin=([^;=\s]+);wskey=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
-				wstopt := cmd(fmt.Sprintf(`wskey="%s" python3 wspt.py`, msg), sender)
+				wstopt := cmd(fmt.Sprintf(`python3 wspt.py wskey="%s"`, msg), sender)
 				logs.Info(wstopt)
 				wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
 				sender.Reply(fmt.Sprintf(wspt))
