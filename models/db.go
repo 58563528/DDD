@@ -160,7 +160,7 @@ const (
 )
 
 func Date() string {
-	return time.Now().Local().Format("2006-01-02")
+	return time.Now().Local().Format("2006-01-02 15:04:05")
 }
 
 func GetJdCookies(sbs ...func(sb *gorm.DB) *gorm.DB) []JdCookie {
@@ -216,6 +216,7 @@ func (ck *JdCookie) InPool(pt_key string) error {
 		tx.Model(ck).Updates(map[string]interface{}{
 			Available: True,
 			PtKey:     pt_key,
+			LoseAt:    date,
 		})
 		return tx.Commit().Error
 	}

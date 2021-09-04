@@ -356,6 +356,7 @@ func (c *Container) getToken() error {
 	version, err := GetQlVersion(c.Address)
 	logs.Debug(err)
 	if c.Version == "2.9" || version == "2.9" {
+	//
 		token, err := getSqlToken()
 		if err != nil {
 			logs.Error(err)
