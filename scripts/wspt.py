@@ -1,7 +1,7 @@
 import json, requests, re
 import sys
 requests.packages.urllib3.disable_warnings()
-ws=sys.argv[0]
+ws=sys.argv[1]
 def getsign():
     try:
         sign = 'https://sign.smxy.xyz/sign' # sign
