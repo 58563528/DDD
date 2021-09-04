@@ -2,17 +2,16 @@ package controllers
 
 import (
 	"encoding/json"
-	"net/http"
-	"strconv"
-	"strings"
-
-	"github.com/beego/beego/v2/adapter/logs"
+	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
 	"github.com/58563528/DDD/models"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
 	zh_translations "gopkg.in/go-playground/validator.v9/translations/zh"
+	"net/http"
+	"strconv"
+	"strings"
 )
 
 var validate *validator.Validate
@@ -120,7 +119,7 @@ func (c *BaseController) Logined() *BaseController {
 		logs.Warn("登录成功")
 		c.PtPin = v.(string)
 		logs.Info(models.Config.Master)
-		if strings.Contains(models.Config.Master, v.(string)) {
+		if strings.EqualFold(models.Config.Master, v.(string)) {
 			c.Master = true
 		}
 	}

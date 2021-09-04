@@ -166,6 +166,7 @@ func CookieOK(ck *JdCookie) bool {
 		if ui.Msg == "not login" {
 			if ck.Available == True {
 				ck.Push(fmt.Sprintf("失效账号，%s", ck.PtPin))
+				//临时使用别人代码
 				JdCookie{}.Push(fmt.Sprintf("失效账号，%s", ck.Nickname))
 				var pinwskey = fmt.Sprintf("pin=%s;wskey=%s;", ck.PtPin, ck.WsKey)
 				//ck.Push(fmt.Sprintf(pinwskey))
