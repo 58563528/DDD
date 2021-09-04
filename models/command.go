@@ -110,7 +110,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 		} else {
 			for i := range cks {
 				eachCk := cks[i]
-				if eachCk.WsKey = "" {
+				if eachCk.WsKey == "" {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
 					res := simpLeCmd(fmt.Sprintf(python wspt.py "pin=%s;wskey=%s;", eachck.Ptpin, eachCk.WsKey))
