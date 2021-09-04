@@ -101,7 +101,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 	if !sender.IsAdmin {
 		sender.Reply("你没有权限操作")
 	}else if a == "" {
-		sender. RepLy("参数错误")
+		sender. Reply("参数错误")
 	} else {
 		cks = LimitJdCookie(cks, a)
 		if Len(cks)==0 {
@@ -120,7 +120,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 						if CookieOk(&tmpCk){
 							newCK, _ := GetJdcookie(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
-							sender.RepLy(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
+							sender.Reply(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
 						} else {
 							sender.Reply(fmt.Sprintf(`"更新失败,账号:%s,获取到的ck无效"`, eachCk.PtPin))
 							}
