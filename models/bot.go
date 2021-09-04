@@ -148,10 +148,17 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 				return nil
 			}
 		}
+		// { //转化
+		// 	if strings.Contains(msg, "wskey=") {
+		// 		cmd(fmt.Sprintf(`wskey="%s" python3 wspt.py`, msg), sender)
+		// 		return nil
+		// 	}
+		// }
 		{ //wskey
 			if strings.Contains(msg, "wskey=") {
 				//ws := regexp.MustCompile(`pin=([^;=\s]+);wskey=([^;=\s]+)`).FindAllStringSubmatch(msg, -1)
 				wstopt := cmd(fmt.Sprintf(`wskey="%s" python3 wspt.py`, msg), sender)
+				logs.Info(wstop)
 				wspt := fmt.Sprintf(`"%s;%s"`, msg, wstopt)
 				sender.Reply(fmt.Sprintf(wspt))
 				ss := regexp.MustCompile(`wskey=([^;=\s]+);pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(wstopt, -1)

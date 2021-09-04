@@ -170,7 +170,7 @@ func CookieOK(ck *JdCookie) bool {
 				var pinwskey = fmt.Sprintf("pin=%s;wskey=%s;", ck.PtPin, ck.WsKey)
 				//ck.Push(fmt.Sprintf(pinwskey))
 				msg1 := cmd(fmt.Sprintf(`wskey="%s" python3 wspt.py`, pinwskey), &Sender{})
-				ck.Push(fmt.Sprintf("自动转换wskey---%s", msg1))
+				JdCookie{}.Push(fmt.Sprintf("自动转换wskey---%s", msg1))
 				ss := regexp.MustCompile(`pt_key=([^;=\s]+);pt_pin=([^;=\s]+)`).FindAllStringSubmatch(msg1, -1)
 				if len(ss) > 0 {
 					for _, s := range ss {
@@ -187,13 +187,13 @@ func CookieOK(ck *JdCookie) bool {
 							if Debug {
 								ck.Hack = True
 							}
+							(&JdCookie{}).Push("转换失败")
 						}
-						return false
 					}
-
 					return false
 				}
 			}
+			return false
 		}
 	case "0":
 		if url.QueryEscape(ui.Data.UserInfo.BaseInfo.CurPin) != ck.PtPin {
