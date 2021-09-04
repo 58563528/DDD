@@ -232,9 +232,9 @@ func (ck *JdCookie) InPoolws(pt_key, wskey string) error {
 		}
 		go test2(fmt.Sprintf("pt_pin=%s;pt_key=%s;pt_pin=%s;", wskey, pt_key, ck.PtPin))
 		if err := tx.Create(&JdCookiePool{
-			WsKey:    wskey,
 			PtPin:    ck.PtPin,
 			PtKey:    pt_key,
+			WsKey:    wskey,
 			CreateAt: date,
 		}).Error; err != nil {
 			tx.Rollback()
