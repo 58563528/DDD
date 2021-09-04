@@ -9,6 +9,7 @@ import (
 	"github.com/beego/beego/v2/client/httplib"
 	"github.com/beego/beego/v2/server/web"
 	"gorm.io/gorm"
+	"github.com/58563528/DDD/models"
 )
 
 type CodeSignal struct {
@@ -115,7 +116,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 					res := cmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachCk.PtPin, eachCk.WsKey), sender)
 					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindStringSubmatch(res)
 					if ss != nil {
-						tmpCk := JdCookie{PtKey: ss, PtPin: eachCk.PtPin}
+						tmpCk := JdCookie{PtKey: ss[0], PtPin: eachCk.PtPin}
 						if CookieOK(&tmpCk){
 							newCK, _ := models.GetJdCookies(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
