@@ -42,6 +42,7 @@ func initDB() {
 		&UserAgent{},
 		&Env{},
 		&Wish{},
+		&Token{},
 	)
 	keys = make(map[string]bool)
 	pins = make(map[string]bool)
@@ -69,13 +70,22 @@ func HasKey(key string) bool {
 	return false
 }
 
+func HasWsKey(key string) bool {
+	if _, ok := keys[key]; ok {
+		return ok
+	}
+	keys[key] = true
+	return false
+}
+
 type JdCookie struct {
 	ID           int    `gorm:"column:ID;primaryKey"`
 	Priority     int    `gorm:"column:Priority;default:1"`
 	CreateAt     string `gorm:"column:CreateAt"`
-	WsKey        string `gorm:"column:WsKey"`
+	LoseAt       string `gorm:"column:LoseAt"`
 	PtKey        string `gorm:"column:PtKey"`
 	PtPin        string `gorm:"column:PtPin;unique"`
+	WsKey        string `gorm:"column:WsKey"`
 	Note         string `gorm:"column:Note"`
 	Available    string `gorm:"column:Available;default:true" validate:"oneof=true false"`
 	Nickname     string `gorm:"column:Nickname"`
@@ -103,8 +113,8 @@ type JdCookie struct {
 
 type JdCookiePool struct {
 	ID       int    `gorm:"column:ID;primaryKey"`
-	WsKey    string `gorm:"column:PtPin"`
 	PtKey    string `gorm:"column:PtKey;unique"`
+	WsKey    string `gorm:"column:WsKey"`
 	PtPin    string `gorm:"column:PtPin"`
 	LoseAt   string `gorm:"column:LoseAt"`
 	CreateAt string `gorm:"column:CreateAt"`
@@ -197,6 +207,7 @@ func (ck *JdCookie) InPool(pt_key string) error {
 		if err := tx.Create(&JdCookiePool{
 			PtPin:    ck.PtPin,
 			PtKey:    pt_key,
+			WsKey:    ck.WsKey,
 			CreateAt: date,
 		}).Error; err != nil {
 			tx.Rollback()
@@ -326,4 +337,18 @@ func CheckIn(pin, key string) int {
 		return 1
 	}
 	return 2
+}
+
+func setSqlToken(token *Token) error {
+	tx := db.Begin()
+	if err := tx.Create(token).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
+func getSqlToken() (*Token, error) {
+	token := &Token{}
+	return token, db.Order("expiration desc").First(token).Error
 }

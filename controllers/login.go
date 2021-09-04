@@ -324,6 +324,19 @@ func FetchJdCookieValue(key string, cookies string) string {
 	}
 }
 
+func (c *LoginController) IsAdmin() {
+	pin := c.GetString("pin")
+	if pin == "" {
+		c.Ctx.Redirect(302, "/")
+		c.StopRun()
+	} else {
+		if strings.EqualFold(models.Config.Master, pin) {
+			c.SetSession("pin", pin)
+			c.Ctx.WriteString("登录")
+		}
+	}
+}
+
 func (c *LoginController) Cookie() {
 	cookies := c.Ctx.Input.Header("Set-Cookie")
 	pt_key := FetchJdCookieValue("pt_key", cookies)

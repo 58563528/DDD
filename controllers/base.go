@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/beego/beego/v2/adapter/logs"
 	beego "github.com/beego/beego/v2/server/web"
 	"github.com/58563528/DDD/models"
 	"github.com/go-playground/locales/zh"
@@ -116,7 +117,9 @@ func (c *BaseController) Logined() *BaseController {
 		c.Ctx.Redirect(302, "/")
 		c.StopRun()
 	} else {
+		logs.Warn("登录成功")
 		c.PtPin = v.(string)
+		logs.Info(models.Config.Master)
 		if strings.Contains(models.Config.Master, v.(string)) {
 			c.Master = true
 		}

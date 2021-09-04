@@ -10,6 +10,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/beego/beego/v2/client/httplib"
 	"github.com/beego/beego/v2/core/logs"
@@ -29,6 +30,8 @@ type Container struct {
 	Address   string
 	Username  string
 	Password  string
+	Cid       string
+	Secret    string
 	Path      string
 	Version   string
 	Token     string
@@ -350,6 +353,8 @@ func (c *Container) read() error {
 
 func (c *Container) getToken() error {
 	// 通过openapi获取token
+	version, err := GetQlVersion(c.Address)
+	logs.Debug(err)
 	if c.Version == "2.9" {
 		// 还是使用Username 和 Password
 		req := httplib.Get(c.Address + fmt.Sprintf(`/open/auth/token?client_id=%s&client_secret=%s`, c.Username, c.Password))
@@ -393,10 +398,13 @@ func (c *Container) request(ss ...string) ([]byte, error) {
 		if s == GET || s == POST || s == PUT || s == DELETE {
 			method = s
 		} else if strings.Contains(s, "/api/") {
+			if c.Version == "2.9" {
+				api = strings.ReplaceAll(s, "api", "open")
+			} else {
 			api = s
-		}else if strings.Contains(s, "/open") {
-			api = s
-		 }else {
+
+			}
+		} else {
 			body = s
 		}
 	}

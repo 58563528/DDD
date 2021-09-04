@@ -60,7 +60,13 @@ var Admin = `<html lang="zh-cn">
                         field: 'CreateAt',
                         title: '创建时间',
                         edit: 'text',
-                        width: 110,
+                        width: 160,
+                        align: 'center',
+                    }, {
+                        field: 'LoseAt',
+                        title: '已失效或更新时间',
+                        edit: 'text',
+                        width: 160,
                         align: 'center',
                     }, {
                         field: 'BeanNum',
@@ -110,6 +116,17 @@ var Admin = `<html lang="zh-cn">
                     }, {
                         field: 'PtPin',
                         title: 'PtPin',
+                        width: 150,
+                        align: 'center',
+                    },{
+                        field: 'WsKey',
+                        title: 'WsKey',
+                        width: 80,
+                        edit: 'text',
+                        align: 'center',
+                    },{
+                        field: 'PtKey',
+                        title: 'PtKey',
                         width: 150,
                         align: 'center',
                     }, {

@@ -31,4 +31,5 @@ func init() {
 	InitReplies()
 	initTask()
 	initRepos()
+	// go InitProxy()
 }

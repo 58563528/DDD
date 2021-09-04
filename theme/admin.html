@@ -69,17 +69,42 @@
 <body>
 <div id="login">
     <h1>Login</h1>
-    <form method="post">
-        <input type="text" required="required" id="pin" placeholder="用户名" name="u"></input>
-        <button class="but" type="submit" onclick="login()">登录</button>
-    </form>
+        <input type="text" required="required" id="pin" placeholder="用户名" name="u" />
+        <button class="but" onclick="login()">登录</button>
 </div>
 
 <script>
+
     function login()
     {
+        const userName = document.querySelector('#pin').value
         sessionStorage.setItem('pin',document.getElementById("pin").value);
-        window.location.href = "/admin"
+        var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var results = xmlhttp.responseText
+                console.log(results)
+                switch (results) {
+                    case "授权登录未确认":
+                        break;
+                    case "登录":
+                        setTimeout(() => {
+                            window.location.href = "/admin"
+                        }, 1000);
+                        break;
+                    case "成功":
+                        setTimeout(() => {
+                            window.location.href = "/admin"
+                        }, 1000);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        xmlhttp.open("POST","/api/login/admin", true);
+        xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+        xmlhttp.send("pin="+userName);
     }
 </script>
 </body>
