@@ -178,7 +178,7 @@ var handleMessage = func(msgs ...interface{}) interface{} {
 							if sender.IsQQ() {
 								ck.QQ = sender.UserID
 							} else if sender.IsTG() {
-								//ck.Telegram = sender.UserID
+								ck.Telegram = sender.UserID
 							}
 							if HasKey(ck.PtKey) {
 								sender.Reply(fmt.Sprintf("重复提交"))
