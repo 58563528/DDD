@@ -114,7 +114,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
 					res := simpLeCmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachck.Ptpin, eachCk.WsKey))
-					ss := regexp MustCompile(pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+):).FindstringSubmatch(res)
+					ss := regexp MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindstringSubmatch(res)
 					if ss != nil {
 						tmpCk := JdCookie{PtKey: ss, PtPin: eachck.Ptpin}
 						if CookieOk(&tmpCk){
