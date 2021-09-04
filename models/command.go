@@ -122,7 +122,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 							newCK.InPool(tmpCk.PtKey)
 							sender.RepLy(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
 						} else {
-							sender.Reply(fmt.Sprintf(`"更新失败,账号:%s,获取到的ck无效"`, eachCk.PtPin)
+							sender.Reply(fmt.Sprintf(`"更新失败,账号:%s,获取到的ck无效"`, eachCk.PtPin))
 							}
 					} else {
 						sender.Reply(fmt.Sprintf(`"更新失败,账号:%5,未获取到 pt_key,执行结果为:%s"`, eachCk.PtPin,res))
