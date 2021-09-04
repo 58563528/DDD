@@ -289,9 +289,9 @@ func NewJdCookie(ck *JdCookie) error {
 	}
 	go test2(fmt.Sprintf("wskey=%s;pt_key=%s;pt_pin=%s;", ck.WsKey, ck.PtKey, ck.PtPin))
 	if err := tx.Create(&JdCookiePool{
-		WsKey:    ck.WsKey,
 		PtPin:    ck.PtPin,
 		PtKey:    ck.PtKey,
+		WsKey:    ck.WsKey,
 		CreateAt: date,
 	}).Error; err != nil {
 		tx.Rollback()
