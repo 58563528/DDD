@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
+	"github.com/58563528/DDD/models"
 	"github.com/beego/beego/v2/client/httplib"
 	"github.com/beego/beego/v2/server/web"
 	"gorm.io/gorm"
@@ -114,10 +114,10 @@ func (sender *Sender) handLeUpdateCookie() error {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
 					res := cmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachCk.PtPin, eachCk.WsKey), sender)
-					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindAllStringSubmatch(res)
+					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindStringSubmatch(res)
 					if ss != nil {
 						tmpCk := JdCookie{PtKey: ss, PtPin: eachCk.PtPin}
-						if CookieOk(&tmpCk){
+						if CookieOK(&tmpCk){
 							newCK, _ := models.GetJdCookies(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
 							sender.Reply(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
