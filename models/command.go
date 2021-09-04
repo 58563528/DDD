@@ -114,17 +114,17 @@ func (sender *Sender) handLeUpdateCookie() error {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
 					res := simpLeCmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachck.Ptpin, eachCk.WsKey))
-					ss := regexp MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindstringSubmatch(res)
+					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindstringSubmatch(res)
 					if ss != nil {
 						tmpCk := JdCookie{PtKey: ss, PtPin: eachck.Ptpin}
 						if CookieOk(&tmpCk){
 							newCK, _ := GetJdcookie(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
-							sender. RepLy(fmt.sprintf(`"更新账号,%s,%s"`, eachCk.PePin, tmpCk.PuKey))
+							sender.RepLy(fmt.sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
 						} else {
-							sender.Repy(fmt.Sprintf(`"更新失败,账号:%s,获取到的ck无效"`, eachCk.PePin)
+							sender.Repy(fmt.Sprintf(`"更新失败,账号:%s,获取到的ck无效"`, eachCk.PtPin)
 					} else {
-					sender.Repy(fmt.Sprintf(`"更新失败,账号:%5,未获取到 pt_key,执行结果为:%s"`, eachCk.PaPin,res))
+					sender.Repy(fmt.Sprintf(`"更新失败,账号:%5,未获取到 pt_key,执行结果为:%s"`, eachCk.PtPin,res))
 					}
 				}
 			}
