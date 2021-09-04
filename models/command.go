@@ -104,7 +104,7 @@ func (sender *Sender) handLeUpdateCookie() error {
 		sender. Reply("参数错误")
 	} else {
 		cks = LimitJdCookie(cks, a)
-		if Len(cks)==0 {
+		if len(cks)==0 {
 			sender.Reply("没有匹配的账号")
 			return errors.New("没有匹配的账号")
 		} else {
@@ -113,12 +113,12 @@ func (sender *Sender) handLeUpdateCookie() error {
 				if eachCk.WsKey == "" {
 					sender.Reply(fmt.Sprintf("更新失败,账号:%s,未提交 wskey", eachCk.PtPin))
 				} else {
-					res := simpLeCmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachck.Ptpin, eachCk.WsKey))
-					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindstringSubmatch(res)
+					res := Cmd(fmt.Sprintf(`python wspt.py "pin=%s;wskey=%s;"`, eachCk.PtPin, eachCk.WsKey))
+					ss := regexp.MustCompile(`pt_key=([^;=\s]+);.*?pt_pin=([^;=\s]+)`).FindAllStringSubmatch(res)
 					if ss != nil {
-						tmpCk := JdCookie{PtKey: ss, PtPin: eachck.Ptpin}
+						tmpCk := JdCookie{PtKey: ss, PtPin: eachCk.PtPin}
 						if CookieOk(&tmpCk){
-							newCK, _ := GetJdcookie(eachCk.PtPin)
+							newCK, _ := getjdCookie(eachCk.PtPin)
 							newCK.InPool(tmpCk.PtKey)
 							sender.Reply(fmt.Sprintf(`"更新账号,%s,%s"`, eachCk.PtPin, tmpCk.PtKey))
 						} else {
